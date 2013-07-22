@@ -155,7 +155,7 @@ public class HttpClientHtml {
 	}
 	
     public static void doHtml() throws Exception {
-    	String [] params={"liangjilong","admin@1988"};
+    	String [] params={"liangjilong","admin@123"};
         HttpClient client = loginHtml(siteUrl, PORT, loginAction,params);
         for (int i = 1; i <=7; i++) {
             String path=createHtml(client, forwardURL1,i);
