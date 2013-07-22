@@ -1,9 +1,7 @@
 package com.app.duapp;
-import java.util.Iterator;
-
+import org.dom4j.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 /**
  * @author liangjilong
@@ -11,106 +9,58 @@ import org.jsoup.select.Elements;
 @SuppressWarnings("all")
 public class JsoupXml {
 	
+	private static String url = "http://api.map.baidu.com/geocoder/v2/?ak=E4805d16520de693a3fe707cdc962045&callback=renderReverse&location=39.983424,116.322987&output=xml&pois=1";
 	public static void main(String[] args)throws Exception {
-		String url = "http://api.map.baidu.com/geocoder/v2/?ak=E4805d16520de693a3fe707cdc962045&callback=renderReverse&location=39.983424,116.322987&output=xml&pois=1";
-		//readXml(url);
-		JsoupReadXml(url);
+		String xml=createAsXml(new Object[]{});
+		//System.out.println(xml);
+		JsoupReadXml(xml);
 	}
+	
 	/**
-	 * 
-	 * @param url xml地址
+	 * Dom4j组装xml
+	 * @param html
 	 * @return
 	 */
-	public static void readXml(String url) throws Exception{ 
+	private static String createAsXml(Object ...obj){
+		org.dom4j.Document doc=DocumentHelper.createDocument();
+		Element  root=doc.addElement("SearchMapRoot");//根
+		root.addElement("status").setText("0");//status
+		Element result=root.addElement("result");//result
+		Element location=result.addElement("location");//location
+		location.addElement("lat").setText("");//lat
+		location.addElement("lng").setText("");//lat
+		result.addElement("formatted_address").setText("");//formatted_address
+		result.addElement("business").setText("");//business
+		Element comp=result.addElement("addressComponent");//addressComponent
+		comp.addElement("streetNumber").setText("");//streetNumber
+		comp.addElement("street").setText("");//street
+		comp.addElement("district").setText("");//district
+		comp.addElement("city").setText("");//city
+		comp.addElement("province").setText("");//province
+		result.addElement("cityCode").setText("");//cityCode
 		
-		Document doc=Jsoup.connect(url).get();
+		Element poi=result.addElement("pois").addElement("poi");
+		poi.addElement("addr").setText("");//addr
+		poi.addElement("distance").setText("");//distance
+		poi.addElement("name").setText("");//name
+		poi.addElement("poiType").setText("");//poiType
+		poi.addElement("tel").setText("");//tel
+		poi.addElement("zip").setText("");//zip
 		
-		Elements status=doc.select("status");//status节点
-		for(Element st:status){
-			System.out.println(st.text());//获取值
-		}
-		Elements lats=doc.select("lat");//lat节点
-		for(Element lat:lats){
-			System.out.println(lat.text());
-		}
-		Elements lngs=doc.select("lng");//lng节点
-		for(Element lng:lngs){
-			System.out.println(lng.text());
-		}
-		Elements formatted_address=doc.select("formatted_address");//formatted_address节点
-		for(Element a:formatted_address){
-			System.out.println(a.text());
-		}
+		Element point=poi.addElement("point");
+		point.addElement("x").setText("");
+		point.addElement("y").setText("");
 		
-		Elements businesss=doc.select("business");//business节点
-		for(Element b:businesss){
-			System.out.println(b.text());
-		}
-		Elements streetNumbers=doc.select("streetNumber");//streetNumber节点
-		for(Element sn:streetNumbers){
-			System.out.println(sn.text());
-		}
-		Elements streets=doc.select("street");//street节点
-		for(Element st:streets){
-			System.out.println(st.text());
-		}
-		Elements districts=doc.select("district");//district节点
-		for(Element d:districts){
-			System.out.println(d.text());
-		}
-		Elements citys=doc.select("city");//city节点
-		for(Element c:citys){
-			System.out.println(c.text());
-		}
-		Elements provinces=doc.select("province");//province节点
-		for(Element p:provinces){
-			System.out.println(p.text());
-		}
-		Elements cityCodes=doc.select("cityCode");//cityCode节点
-		for(Element cc:cityCodes){
-			System.out.println(cc.text());
-		}
-		Elements addrs=doc.select("addr");//addr节点
-		for(Element add:addrs){
-			System.out.println(add.text());
-		}
-		Elements distances=doc.select("distance");//distance节点
-		for(Element d:distances){
-			System.out.println(d.text());
-		}
-		Elements names=doc.select("name");//name节点
-		for(Element n:names){
-			System.out.println(n.text());
-		}
-		Elements poiTypes=doc.select("poiType");//poiType节点
-		for(Element pt:poiTypes){
-			System.out.println(pt.text());
-		}
-		Elements tels=doc.select("tel");//tel节点
-		for(Element t:tels){
-			System.out.println(t.text());
-		}
-		Elements zips=doc.select("zip");//zip节点
-		for(Element z:zips){
-			System.out.println(z.text());
-		}
-		Elements xs=doc.select("x");//zip节点
-		for(Element x:xs){
-			System.out.println(x.text());
-		}
-		Elements ys=doc.select("y");//zip节点
-		for(Element y:ys){
-			System.out.println(y.text());
-		}
-		
+		return doc.asXML();
 	}
 	
 	/**
 	 * 用Jsoup去解析xml
-	 * @param url
+	 * @param params
 	 */
-	private static void JsoupReadXml(String url) throws Exception{
-		org.jsoup.nodes.Document doc=Jsoup.connect(url).get();
+	private static void JsoupReadXml(String params) throws Exception{
+		//org.jsoup.nodes.Document doc=Jsoup.connect(params).get();//网络连接
+		org.jsoup.nodes.Document doc=Jsoup.parse(params);//本地数据,连接关闭就可以调用
 		if(doc!=null)
 		{
 			Elements pois=doc.select("poi");//获取到poi节点
@@ -139,9 +89,9 @@ public class JsoupXml {
 				String	lng=doc.select("lng").text().trim();
 				String	formatted_address=doc.select("formatted_address").text().trim();
 				String	business=doc.select("business").text().trim();
-				System.out.println(business);
+				String	status=doc.select("status").text().trim();
+				System.out.println(status);
 			}
 		}
 	}
-	 
 }
