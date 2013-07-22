@@ -1,0 +1,23 @@
+@charset "utf-8";
+/* CSS Document */
+html, body{padding:0; margin:0;}
+body {font:12px/normal Verdana, Arial, Helvetica, sans-serif;}
+img {border: none;}
+ul,li{list-style: none;}
+
+/*menu*/
+#menu_out{width:960px;background:url(../images/nav_l.jpg) no-repeat left top;margin:20px auto;}
+#menu_in{background:url(../images/nav_r.jpg) no-repeat right top;padding-right:4px;}
+#menu{height:46px;background:url(../images/nav_bg.jpg) 0 0 repeat-x;margin-left:8px;}
+#menu ul{padding:0;border:0;list-style:none;}
+
+#nav {padding:0;border:0;list-style:none;display:block; font-size:14px;}
+
+#nav .mainlevel {background:url(../images/nav_bg.jpg) 0 0 repeat-x;height:46px;float:left;  width:108px;/*IE6 only*/}
+#nav .mainlevel a {color:#fff; text-decoration:none; line-height:46px; display:block; text-align:center;width:108px;}
+#nav .mainlevel a:hover {color:#fff; text-decoration:none; background:url(../images/nav_hover.jpg) no-repeat; width:108px;}
+
+#nav .mainlevel ul {display:none; position:absolute;float: left;margin-left:-8px;border:#3c4956 1px solid;border-top:none;font-size:12px;}
+#nav .mainlevel li { width:108px;/*IE6 only*/}
+#nav .mainlevel li a{background:#a8b2ba;color:#000; }
+#nav .mainlevel li a:hover{background:#3a4754; color:#fff;}

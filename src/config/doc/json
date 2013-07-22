@@ -1,0 +1,7 @@
+{
+	"info":
+	{
+		"users":{"username":"liangjilong","email":"jilongliang@sina.com","tel":"12396878","age":"25"},
+		"address":{"street":"棠东","province":"广东省","district":"天河区","city":"广州市"}
+	}
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- constant name="struts.custom.i18n.resources" value="res.message" /> -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.ui.theme" value="simple" />
+	<!-- 设置大文件的上传 1073741824=1024*1024*1024=1G 不设置的话,即使你限定上传多少兆还是报空指针-->
+	<constant name="struts.multipart.maxSize" value="1073741824" />
+	<!-- 设置表单form标签的action提交格式 -->
+	<constant name="struts.action.extension" value="action" />
+	
+	<package name="" namespace="/" extends="struts-default">
+		<action name="user_*" class="com.app.action.UserAction" method="{1}">
+			<result name="input">/common/faile.jsp</result>
+			<result name="success">/common/success.jsp</result>
+			<result name="userinfo">/user/userDetail.jsp</result>
+		</action>
+	</package>
+</struts>

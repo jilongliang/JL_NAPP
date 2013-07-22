@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+        <!-- 要调用的工作类 -->
+        <bean id="quartzJob" class="com.app.domain.timer.QuartzJob"/>
+        <bean id="htmlSpider" class="com.app.domain.timer.Spider"/>
+        <bean id="duApp" class="com.app.domain.timer.DuApp"/>
+        
+        <!-- 定义调用对象和调用对象的方法 -->
+        <bean id="taskQuart" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="quartzJob"/>
+            <property name="targetMethod" value="doBatchsDelete"/>
+        </bean>
+        
+        <!-- 爬虫 -->
+         <bean id="taskSpider" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="htmlSpider"/>
+            <property name="targetMethod" value="doSpider"/>
+        </bean>
+        
+         <bean id="taskDuApp" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="duApp"/>
+            <property name="targetMethod" value="doDeocoder"/>
+        </bean>
+        
+        <!-- 定义触发时间 -->
+        <bean id="TriggerQuart" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="taskQuart"/>
+		</property>
+              <property name="cronExpression">
+            	<!-- 每天十二点同步一次 -->
+				<!--<value>0 0 12 ? * *</value> -->
+				<value>0 38 23 * * ?</value>
+            </property>
+        </bean>
+        
+        <bean id="TriggerSpider" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="taskSpider"/>
+		</property>
+              <property name="cronExpression">
+				<!--<value>0 0 12 ? * *</value> -->
+				<value>0 05 00 * * ?</value>
+            </property>
+        </bean>
+        
+        <bean id="TriggerDuApp" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="taskDuApp"/>
+		</property>
+              <property name="cronExpression">
+				<!--<value>0 0 12 ? * *</value> -->
+				<value>0 46 15 * * ?</value>
+            </property>
+        </bean>
+        
+        <!-- 如果将lazy-init='false'那么容器启动就会执行调度程序  -->
+        <bean autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+            <property name="triggers">
+                <list>
+			<!--   <ref bean="TriggerQuart"/>
+		 	  <ref bean="TriggerSpider"/> -->
+		 	  <ref bean="TriggerDuApp"/>
+                </list>
+            </property>
+        </bean>
+    
+</beans>
